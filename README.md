@@ -1,5 +1,5 @@
 # TreeN93
 
-Build the tree: https://hannah-fisher.github.io/TreeN93/Build/
+Build the tree: [TreeN93/Build](https://hannah-fisher.github.io/TreeN93/Build/)
 
-Visualize the tree and clusters: https://hannah-fisher.github.io/TreeN93/Viz/
+Visualize the tree and clusters: [TreeN93/Viz](https://hannah-fisher.github.io/TreeN93/Viz/)
