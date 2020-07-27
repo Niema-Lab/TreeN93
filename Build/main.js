@@ -24,23 +24,34 @@ add text to the intro div
 var introPar = document.createElement("p");
 introPar.innerHTML = "This tool is used to create Newick formatted representations of clustering trees";
 introPar.innerHTML += " from the pairwise distances between the leaves.<br>";
-introPar.innerHTML += "The input should be in a .csv file where the first column is distance, and the second and third columns are the names of the leaf nodes.<br>";
+introPar.innerHTML += "The input should be in a .csv file where the first column is distance, and the second and third columns are the names of the leaf nodes separated by that distance.<br>";
 introPar.innerHTML += "Choose an input file by clicking the 'Choose File' button.<br>";
 introPar.innerHTML += "See the example below for formatting:";
 introDiv.appendChild(introPar);
 
 /*
 add things to the example div
+also, format the example div like a flexbox
 */
+exampleDiv.style.display = "flex";
+exampleDiv.style["align-items"] = "center";
 var exampleInput = document.createElement("p");
 exampleInput.innerHTML = "1,A,B<br>2,A,C<br>3,A,D<br>2,B,C<br>3,C,D<br>";
+var arrow1 = document.createElement("p");
+arrow1.innerHTML = "&rArr;";
+arrow1.style["font-size"] = "40px";
 var exampleNewick = document.createElement("p")
 exampleNewick.innerHTML = "(((A:1,B:1)1:1,C:2)2:1,D:3)3";
+var arrow2 = document.createElement("p");
+arrow2.innerHTML = "&rArr;";
+arrow2.style["font-size"] = "40px";
 var exampleSVG = document.createElement("p");
 exampleSVG.innerHTML = '<svg id="tree_display" width="137.2" height="140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs xmlns="http://www.w3.org/1999/xhtml"><style type="text/css"><![CDATA[.tree-selection-brush .extent {fill-opacity: .05; stroke: #fff; shape-rendering: crispEdges;}.tree-scale-bar text {font: sans-serif;}.tree-scale-bar line, .tree-scale-bar path {fill: none; stroke: #000; shape-rendering: crispEdges;}.node circle, .node ellipse, .node rect {fill: steelblue; stroke: black; stroke-width: 0.5px}.internal-node circle, .internal-node ellipse, .internal-node rect{fill: #CCC; stroke: black; stroke-width: 0.5px;}.node {font: 10px sans-serif;}.node-selected {fill: #f00 !important;}.node-collapsed circle, .node-collapsed ellipse, .node-collapsed rect {fill: black !important;}.node-tagged {fill: #00f;}.branch {fill: none; stroke: #999; stroke-width: 2px;}.clade {fill: #1f77b4; stroke: #444; stroke-width: 2px; opacity: 0.5;}.branch-selected {stroke: #f00 !important; stroke-width: 3px}.branch-tagged {stroke: #00f; stroke-dasharray: 10,5; stroke-width: 2px;}.branch-tracer {stroke: #bbb; stroke-dasharray: 3,4; stroke-width: 1px;}.branch-multiple {stroke-dasharray: 5, 5, 1, 5; stroke-width: 3px;}.tree-widget {}]]></style></defs><defs/><g class="phylotree-container" transform="translate (22,0) "><g class="tree-selection-brush" style="pointer-events: all; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><rect class="background" x="0" width="115.19999999999999" y="0" height="140" style="visibility: hidden; cursor: crosshair;"/><rect class="extent" x="0" width="0" y="0" height="0" style="cursor: move;"/><g class="resize n" transform="translate(0,0)" style="cursor: ns-resize; display: none;"><rect y="-3" width="0" height="6" style="visibility: hidden;"/></g><g class="resize e" transform="translate(0,0)" style="cursor: ew-resize; display: none;"><rect x="-3" width="6" height="0" style="visibility: hidden;"/></g><g class="resize s" transform="translate(0,0)" style="cursor: ns-resize; display: none;"><rect y="-3" width="0" height="6" style="visibility: hidden;"/></g><g class="resize w" transform="translate(0,0)" style="cursor: ew-resize; display: none;"><rect x="-3" width="6" height="0" style="visibility: hidden;"/></g><g class="resize nw" transform="translate(0,0)" style="cursor: nwse-resize; display: none;"><rect x="-3" y="-3" width="6" height="6" style="visibility: hidden;"/></g><g class="resize ne" transform="translate(0,0)" style="cursor: nesw-resize; display: none;"><rect x="-3" y="-3" width="6" height="6" style="visibility: hidden;"/></g><g class="resize se" transform="translate(0,0)" style="cursor: nwse-resize; display: none;"><rect x="-3" y="-3" width="6" height="6" style="visibility: hidden;"/></g><g class="resize sw" transform="translate(0,0)" style="cursor: nesw-resize; display: none;"><rect x="-3" y="-3" width="6" height="6" style="visibility: hidden;"/></g></g><path class="branch" d="M28.666666666666664,35V52.5H0" style="stroke: black;"><title>Length = 1</title></path><path class="branch" d="M28.666666666666664,35V17.5H0" style="stroke: black;"><title>Length = 1</title></path><path class="branch" d="M57.33333333333333,61.25V87.5H0" style="stroke: black;"><title>Length = 2</title></path><path class="branch" d="M57.33333333333333,61.25V35H28.666666666666664" style="stroke: black;"><title>Length = 1</title></path><path class="branch" d="M86,91.875V122.5H0" style="stroke: black;"><title>Length = 3</title></path><path class="branch" d="M86,91.875V61.25H57.33333333333333" style="stroke: black;"><title>Length = 1</title></path><g class="internal-node" transform="translate(86,91.875)"><circle r="3"/></g><g class="internal-node" transform="translate(57.33333206176758,61.25)"><circle r="3"/></g><g class="internal-node" transform="translate(28.66666603088379,35)"><circle r="3"/></g><g class="node" style="fill: black;" transform="translate(0,17.5)"><text dy="3.96" dx="3.96" transform="translate(-20,0)" text-anchor="start" style="opacity: 1; font-size: 12px;">A</text><line x1="0" x2="0" y1="0" y2="0" class="branch-tracer" transform="" style="opacity: 1;"/></g><g class="node" style="fill: black;" transform="translate(0,52.5)"><text dy="3.96" dx="3.96" transform="translate(-20,0)" text-anchor="start" style="opacity: 1; font-size: 12px;">B</text><line x1="0" x2="0" y1="0" y2="0" class="branch-tracer" transform="" style="opacity: 1;"/></g><g class="node" style="fill: black;" transform="translate(0,87.5)"><text dy="3.96" dx="3.96" transform="translate(-20,0)" text-anchor="start" style="opacity: 1; font-size: 12px;">C</text><line x1="0" x2="0" y1="0" y2="0" class="branch-tracer" transform="" style="opacity: 1;"/></g><g class="node" style="fill: black;" transform="translate(0,122.5)"><text dy="3.96" dx="3.96" transform="translate(-20,0)" text-anchor="start" style="opacity: 1; font-size: 12px;">D</text><line x1="0" x2="0" y1="0" y2="0" class="branch-tracer" transform="" style="opacity: 1;"/></g></g></svg>';
-exampleDiv.appendChild(exampleInput);
-exampleDiv.appendChild(exampleNewick);
-exampleDiv.appendChild(exampleSVG);
+var examples = [exampleInput, arrow1, exampleNewick, arrow2, exampleSVG];
+for (var e of examples){
+  e.style.margin = "10px";
+  exampleDiv.appendChild(e);
+}
 
 /*
 add things to the user div
@@ -151,7 +162,8 @@ function onFileSelect(e){
       var l = [];
       displayTreeString(root, 0, l);
       treeNewick = root.getNewickString();
-      newickText.innerHTML = treeNewick;
+      newickText.innerHTML = "Newick tree representation of the inputted distances matrix:<br>";
+      newickText.innerHTML += treeNewick;
     }
   }
 }
