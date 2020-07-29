@@ -49,7 +49,7 @@ class TreeNode {
         s += this.getNewickStringHelper(c);
         s += ",";
       }
-      s = s.substring(0, s.length - 1); //remove extra comma 
+      s = s.substring(0, s.length - 1); //remove extra comma
       s += ")";
     }
     //add this node
@@ -57,7 +57,7 @@ class TreeNode {
       s += node.label;
     }
     if (node.edgeLength != null){
-      s += ":" + parseFloat(node.edgeLength).toFixed(10);
+      s += ":" + parseFloat(parseFloat(node.edgeLength).toFixed(10).toString());
     }
     return s;
   }
