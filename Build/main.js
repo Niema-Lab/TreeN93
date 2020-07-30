@@ -6,6 +6,7 @@ GENERAL DESCRIPTION GOES HERE OF THIS ENTIRE THING
 variables to be used throughout
 */
 var treeNewick = "";
+var fileReader;
 
 /*
 create divs on the page
@@ -103,28 +104,38 @@ for (var element of [exampleInputDivInner, exampleNewickContent, exampleSVGConte
 /*
 add things to the user div
 */
-var fileInputterList = document.createElement("INPUT");
-var fileInputterMatrix = document.createElement("INPUT");
-var inputListDiv = document.createElement("div");
-var inputListLabel = document.createElement("p");
-inputListLabel.innerHTML = "Distance List";
-var inputMatrixDiv = document.createElement("div");
-inputMatrixLabel = document.createElement("p");
-inputMatrixLabel.innerHTML = "Distance Matrix";
+var inputsDiv = document.createElement("div");
+inputsDiv.style["display"] = "flex";
+var labels = ["Distance List", "Distance Matrix"];
+var inputFunctions = [parseDistancesList, parseDistancesMatrix];
+var fileInputters = [];
+for (var i = 0; i < 2; i ++){
+  var div = document.createElement("div");
+  var label = document.createElement("p");
+  label.innerHTML = labels[i];
+  var inputter = document.createElement("INPUT");
+  inputter.setAttribute("type", "file");
+  fileInputters.push(inputter);
+  div.appendChild(label);
+  div.appendChild(inputter);
+  inputsDiv.appendChild(div);
+}
 var newickText = document.createElement("p");
 userDiv.appendChild(document.createElement("hr"));
 userDiv.appendChild(document.createElement("br"));
-inputListDiv.appendChild(inputListLabel);
-inputListDiv.appendChild(fileInputterList);
-inputMatrixDiv.appendChild(inputMatrixLabel);
-inputMatrixDiv.appendChild(fileInputterMatrix);
-var inputsDiv = document.createElement("div");
-inputsDiv.style["display"] = "flex";
-inputsDiv.appendChild(inputListDiv);
-inputsDiv.appendChild(inputMatrixDiv);
 userDiv.appendChild(inputsDiv);
 userDiv.appendChild(document.createElement("br"));
 userDiv.appendChild(newickText);
+
+/*
+add functionality to file inputs
+*/
+fileInputters[0].addEventListener("change", function(e){
+  readInputFile(e, inputFunctions[0]);
+});
+fileInputters[1].addEventListener("change", function(e){
+  readInputFile(e, inputFunctions[1]);
+});
 
 /*
 function to create tree from input pairwise distances
@@ -204,78 +215,71 @@ function compareDistanceObject(a, b){
 }
 
 /*
-create a file input to upload the file with the distances as a list
+function to read distance input file
+takes another function, which parses based on if distances are in list or matrix
 */
-fileInputterList.setAttribute("type", "file");
-fileInputterList.addEventListener("change", onFileSelectList);
-function onFileSelectList(e){
+function readInputFile(e, parseDistances){
   var files = e.target.files;
   if (files.length == 1){
     var f = files[0];
-    reader = new FileReader();
-    reader.readAsText(f);
-    reader.onload = function(e){
-      var distanceList = [];
-      var lines = reader.result.trim().split("\n");
-      for (var l of lines){
-        l = l.trim();
-        var parts = l.split(",");
-        var actualParts = [parseFloat(parts[0]), parts[1], parts[2]];
-        distanceList.push(actualParts);
-      }
-      var root = distToTree(distanceList, 100);
-      var l = [];
-      displayTreeString(root, 0, l);
-      treeNewick = root.getNewickString();
-      newickText.innerHTML = "Newick tree representation of the inputted distances list:<br>";
-      newickText.innerHTML += treeNewick;
-    }
+    fileReader = new FileReader();
+    fileReader.readAsText(f);
+    fileReader.onload = parseDistances;
   }
 }
 
 /*
-create a file input to upload the file with the distances as a matrix
+function to parse distances in list format
 */
-fileInputterMatrix.setAttribute("type", "file");
-fileInputterMatrix.addEventListener("change", onFileSelectMatrix);
-function onFileSelectMatrix(e){
-  var files = e.target.files;
-  if (files.length == 1){
-    var f = files[0];
-    reader = new FileReader();
-    reader.readAsText(f);
-    reader.onload = function(e){
-      var distanceMatrix = [];
-      var distanceList = [];
-      var lines = reader.result.trim().split("\n");
-      var firstLine = lines.shift();
-      var firstLineParts = firstLine.split(",");
-      firstLineParts.shift();
-      for (var nodeName of firstLineParts){
-        distanceMatrix.push([]);
-      }
-      for (var i = 0; i < lines.length; i ++){
-        var l = lines[i].trim();
-        var distances = l.split(",");
-        distances.shift();
-        distanceMatrix[i] = distances;
-      }
-      for (var i = 0; i < distanceMatrix.length; i ++){
-        for (var j = i + 1; j < distanceMatrix.length; j ++){
-          var d = distanceMatrix[i][j];
-          var parts = [parseFloat(d), firstLineParts[i], firstLineParts[j]];
-          distanceList.push(parts);
-        }
-      }
-      console.log(distanceList);
-      var root = distToTree(distanceList, 100);
-      var l = [];
-      displayTreeString(root, 0, l);
-      treeNewick = root.getNewickString();
-      newickText.innerHTML = "Newick tree representation of the inputted distances matrix:<br>";
-      newickText.innerHTML += treeNewick;
+function parseDistancesList(){
+  var distanceList = [];
+  var lines = fileReader.result.trim().split("\n");
+  for (var l of lines){
+    l = l.trim();
+    var parts = l.split(",");
+    var actualParts = [parseFloat(parts[0]), parts[1], parts[2]];
+    distanceList.push(actualParts);
+  }
+  var root = distToTree(distanceList, 100);
+  var l = [];
+  displayTreeString(root, 0, l);
+  treeNewick = root.getNewickString();
+  newickText.innerHTML = "Newick tree representation of the inputted distances list:<br>";
+  newickText.innerHTML += treeNewick;
+}
+
+/*
+function to parse distances in matrix format
+*/
+function parseDistancesMatrix(){
+  var distanceMatrix = [];
+  var distanceList = [];
+  var lines = fileReader.result.trim().split("\n");
+  var firstLine = lines.shift();
+  var firstLineParts = firstLine.split(",");
+  firstLineParts.shift();
+  for (var nodeName of firstLineParts){
+    distanceMatrix.push([]);
+  }
+  for (var i = 0; i < lines.length; i ++){
+    var l = lines[i].trim();
+    var distances = l.split(",");
+    distances.shift();
+    distanceMatrix[i] = distances;
+  }
+  for (var i = 0; i < distanceMatrix.length; i ++){
+    for (var j = i + 1; j < distanceMatrix.length; j ++){
+      var d = distanceMatrix[i][j];
+      var parts = [parseFloat(d), firstLineParts[i], firstLineParts[j]];
+      distanceList.push(parts);
     }
   }
+  var root = distToTree(distanceList, 100);
+  var l = [];
+  displayTreeString(root, 0, l);
+  treeNewick = root.getNewickString();
+  newickText.innerHTML = "Newick tree representation of the inputted distances matrix:<br>";
+  newickText.innerHTML += treeNewick;
 }
 
 /*
