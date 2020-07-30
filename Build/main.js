@@ -74,7 +74,7 @@ var exampleInputDivInner = document.createElement("div");
 exampleInputDivInner.style["display"] = "flex";
 exampleInputDivInner.style["align-items"] = "center";
 var exampleInputParText = [
-  "1,A,B<br>2,A,C<br>3,A,D<br>2,B,C<br>3,B,D<br>3,C,D<br>",
+  "A,B,1<br>A,C,2<br>A,D,3<br>B,C,2<br>B,D,3<br>C,D,3<br>",
   "OR",
   ",A,B,C,D<br>A,0,1,2,3<br>B,1,0,2,3<br>C,2,2,0,3<br>D,3,3,3,0"
 ];
@@ -230,6 +230,7 @@ function readInputFile(e, parseDistances){
 
 /*
 function to parse distances in list format
+skips over lines that do not have valid distances 
 */
 function parseDistancesList(){
   var distanceList = [];
@@ -237,7 +238,10 @@ function parseDistancesList(){
   for (var l of lines){
     l = l.trim();
     var parts = l.split(",");
-    var actualParts = [parseFloat(parts[0]), parts[1], parts[2]];
+    var actualParts = [parseFloat(parts[2]), parts[0], parts[1]];
+    if (isNaN(actualParts[0])){
+      continue;
+    }
     distanceList.push(actualParts);
   }
   var root = distToTree(distanceList, 100);
