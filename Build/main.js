@@ -1,5 +1,13 @@
 /*
-GENERAL DESCRIPTION GOES HERE OF THIS ENTIRE THING
+Tool to build Newick trees from pairwise distances between leaf nodes.
+Inputs can either be in list or matrix format, and must be in a CSV file.
+The newick string can be saved with a button click, or copied from the text area.
+
+Assumptions:
+  the pairwise distances in the input form a valid tree 
+
+Things to note:
+  if an input file is too large, the browser can't handle it
 */
 
 /*
@@ -241,6 +249,12 @@ function to parse distances in list format
 skips over lines that do not have valid distances
 */
 function parseDistancesList(){
+  if (fileReader.result == ""){
+    newickTextLabel.innerHTML = "Input file is either empty or too large to be read in the browser.<br>";
+    newickTextArea.hidden = true;
+    treeNewick = "";
+    return;
+  }
   var distanceList = [];
   var lines = fileReader.result.trim().split("\n");
   for (var l of lines){
@@ -271,6 +285,12 @@ function parseDistancesList(){
 function to parse distances in matrix format
 */
 function parseDistancesMatrix(){
+  if (fileReader.result == ""){
+    newickTextLabel.innerHTML = "Input file is either empty or too large to be read in the browser.<br>";
+    newickTextArea.hidden = true;
+    treeNewick = "";
+    return;
+  }
   var distanceMatrix = [];
   var distanceList = [];
   var lines = fileReader.result.trim().split("\n");
