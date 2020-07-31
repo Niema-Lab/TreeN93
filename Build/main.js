@@ -120,12 +120,20 @@ for (var i = 0; i < 2; i ++){
   div.appendChild(inputter);
   inputsDiv.appendChild(div);
 }
-var newickText = document.createElement("p");
+var newickTextLabel = document.createElement("p");
+var newickTextArea = document.createElement("textarea");
 userDiv.appendChild(document.createElement("hr"));
 userDiv.appendChild(document.createElement("br"));
 userDiv.appendChild(inputsDiv);
 userDiv.appendChild(document.createElement("br"));
-userDiv.appendChild(newickText);
+userDiv.appendChild(newickTextLabel);
+userDiv.appendChild(newickTextArea);
+newickTextArea.cols = 100;
+newickTextArea.rows = 20;
+newickTextArea["overflow-y"] = "scroll";
+newickTextArea.hidden = true;
+userDiv.appendChild(document.createElement("br"));
+userDiv.appendChild(document.createElement("br"));
 
 /*
 add functionality to file inputs
@@ -230,7 +238,7 @@ function readInputFile(e, parseDistances){
 
 /*
 function to parse distances in list format
-skips over lines that do not have valid distances 
+skips over lines that do not have valid distances
 */
 function parseDistancesList(){
   var distanceList = [];
@@ -246,10 +254,17 @@ function parseDistancesList(){
   }
   var root = distToTree(distanceList, 100);
   var l = [];
-  displayTreeString(root, 0, l);
-  treeNewick = root.getNewickString();
-  newickText.innerHTML = "Newick tree representation of the inputted distances list:<br>";
-  newickText.innerHTML += treeNewick;
+  try {
+    newickTextLabel.innerHTML = "Newick tree representation of the inputted distances list:<br>";
+    treeNewick = root.getNewickString();
+    newickTextArea.innerHTML = treeNewick;
+    newickTextArea.hidden = false;
+
+  }
+  catch (e){
+    newickTextLabel.innerHTML = "Input is invalid. <br>Please check that input file is formatted correctly and try again.";
+    newickTextArea.hidden = true;
+  }
 }
 
 /*
@@ -280,10 +295,16 @@ function parseDistancesMatrix(){
   }
   var root = distToTree(distanceList, 100);
   var l = [];
-  displayTreeString(root, 0, l);
   treeNewick = root.getNewickString();
-  newickText.innerHTML = "Newick tree representation of the inputted distances matrix:<br>";
-  newickText.innerHTML += treeNewick;
+  if (!treeNewick.includes("NaN")){
+    newickTextLabel.innerHTML = "Newick tree representation of the inputted distances matrix:<br>";
+    newickTextArea.innerHTML = treeNewick;
+    newickTextArea.hidden = false;
+  }
+  else{
+    newickTextLabel.innerHTML = "Input is invalid. <br>Please check that input file is formatted correctly and try again.";
+    newickTextArea.hidden = true;
+  }
 }
 
 /*
