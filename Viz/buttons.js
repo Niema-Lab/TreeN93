@@ -373,3 +373,12 @@ buttons1Div.appendChild(clustersDropdown);
 buttons1Div.appendChild(saveTreeDropdown);
 buttons1Div.appendChild(clustersDropdownContent);
 buttons1Div.appendChild(saveTreeDropdownContent);
+
+/*
+make button to maximize clusters
+put it in button 2 div 
+*/
+var maximizeButton = document.createElement("button");
+maximizeButton.innerHTML = "Maximize";
+maximizeButton.addEventListener("click", maximize);
+buttons2Div.appendChild(maximizeButton);

@@ -197,7 +197,8 @@ function to add custom menu items to the nodes
 */
 function addCustomNodeMenus(){
   tree.get_nodes().forEach(function(n){
-    var h = calcDistanceNodeToLeaf(n);
+    calcDistanceNodeToLeaf(n);
+    var h = n["height"];
     d3.layout.phylotree.add_custom_menu(n,
       function(n){
         return "Height: " + h;
@@ -239,7 +240,7 @@ function calcDistanceNodeToLeaf(n){
     current = current.children[0];
     d += parseFloat(Number(current.attribute).toFixed(precision));
   }
-  return d;
+  n["height"] = d;
 }
 
 /*
@@ -381,4 +382,59 @@ function nodeStyler(dom_element, node_object){
   dom_element.style("fill", null);
   var color = clusterToColorDict[nodeNameToClusterNum[node_object.name] % 4];
   dom_element.style("fill", color);
+}
+
+/*
+function to calculate the minimum threshold with the maximum clusters
+and set the threshold to that, and update the trees 
+*/
+function maximize(){
+  var internalNodes = [];
+  for (var n of tree.get_nodes()){
+    if (n.children != null){
+      internalNodes.push(n);
+    }
+  }
+  internalNodes.sort(compareByHeight);
+  var clusterCount = 0;
+  var bestClusterCount = 0;
+  var bestThreshold = 0;
+  for (var n of internalNodes){
+    var leafChildren = 0;
+    for (var c of n.children){
+      if (c.children == null){
+        leafChildren += 1;
+      }
+    }
+    if (leafChildren == 0){
+      clusterCount -= 1;
+    }
+    else if (leafChildren == 2){
+      clusterCount += 1;
+    }
+    if (clusterCount > bestClusterCount){
+      bestClusterCount = clusterCount;
+      bestThreshold = n["height"];
+    }
+  }
+  threshold = bestThreshold;
+  thresholdInput.value = threshold;
+  thresholdSlider.value = threshold * sliderSize / maxDistance;
+  branchIndex = 0;
+  doEverythingTreeClusters();
+  updateGuideTree();
+}
+
+/*
+function to compare nodes by their height
+for sorting in maximize function
+*/
+function compareByHeight(n1, n2){
+  if (n1["height"] < n2["height"]){
+    return -1;
+  }
+  if (n1["height"] > n2["height"]){
+    return 1;
+  }
+  return 0;
 }
