@@ -103,7 +103,6 @@ function makeTree(){
   tree = tree.spacing_x(x_spacing, true);
   tree = tree.spacing_y(y_spacing, true);
   tree(d3.layout.newick_parser(readerResult)).layout();
-  addCustomNodeMenus();
 }
 
 /*
@@ -197,7 +196,6 @@ function to add custom menu items to the nodes
 */
 function addCustomNodeMenus(){
   tree.get_nodes().forEach(function(n){
-    calcDistanceNodeToLeaf(n);
     var h = n["height"];
     d3.layout.phylotree.add_custom_menu(n,
       function(n){
@@ -231,16 +229,18 @@ function addCustomNodeMenus(){
 }
 
 /*
-function to calculate the distance of a given node from the leaves
+function to calculate and set all node heights
+starts at root, iterates down the tree
 */
-function calcDistanceNodeToLeaf(n){
-  var d = 0;
-  var current = n;
-  while (current.children != null){
-    current = current.children[0];
-    d += parseFloat(Number(current.attribute).toFixed(precision));
+function calcNodeHeights(node, before){
+  node["height"] = parseFloat(Number(before).toFixed(precision));
+  if (node.children == null){
+    return;
   }
-  n["height"] = d;
+  for (var c of node.children){
+    var nextHeight = before - parseFloat(Number(c.attribute).toFixed(precision));
+    calcNodeHeights(c, nextHeight);
+  }
 }
 
 /*
@@ -386,7 +386,7 @@ function nodeStyler(dom_element, node_object){
 
 /*
 function to calculate the minimum threshold with the maximum clusters
-and set the threshold to that, and update the trees 
+and set the threshold to that, and update the trees
 */
 function maximize(){
   var internalNodes = [];

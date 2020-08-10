@@ -23,7 +23,9 @@ fileChooseExampleButton.addEventListener("click", function(){
   thresholdSlider.value = 0;
   makeTree();
   calcMaxDistance();
+  calcNodeHeights(tree.get_nodes()[0], maxDistance); //this seems ridiculous, but idk how to just get root
   calculateNumLeaves();
+  addCustomNodeMenus();
   doEverythingTreeClusters();
   updateGuideTree();
   setTimeout(() => {sortTreeUpButton.click();}, 500); //this is suss but idk what to do about it...
@@ -113,7 +115,9 @@ function onFileSelect(e){
       thresholdSlider.value = 0;
       makeTree();
       calcMaxDistance();
+      calcNodeHeights(tree.get_nodes()[0], maxDistance); //this seems ridiculous, but idk how to just get root
       calculateNumLeaves();
+      addCustomNodeMenus();
       doEverythingTreeClusters();
       updateGuideTree();
       thresholdSlider.setAttribute("min", "0");
@@ -221,6 +225,7 @@ for (var i = 0; i < 4; i ++){
     tree(d3.layout.newick_parser(readerResult)).layout();
     sortNodes(sortNodesUp);
     updateGuideTree();
+      calcNodeHeights(tree.get_nodes()[0], maxDistance); //this seems ridiculous, but idk how to just get root
     addCustomNodeMenus();
   });
   sizeButtons.push(b);
@@ -376,7 +381,7 @@ buttons1Div.appendChild(saveTreeDropdownContent);
 
 /*
 make button to maximize clusters
-put it in button 2 div 
+put it in button 2 div
 */
 var maximizeButton = document.createElement("button");
 maximizeButton.innerHTML = "Maximize";
