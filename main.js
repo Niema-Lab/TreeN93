@@ -54,11 +54,12 @@ vizDiv.appendChild(vizP);
 add content to note div
 */
 var noteP = document.createElement("p");
-noteP.innerHTML = "Note: All computations done by TreeN93 are done in the user's \
-browser. Thus, TreeN93's ability to operate on large files is limited by the \
+noteP.innerHTML = "Note: All computations performed by TreeN93 are done in the user's \
+browser. Thus, TreeN93's ability to operate on large data sets is limited by the \
 available memory of the user's browser. If too large of a file is given as an \
 input for TreeN93, the computations may fail and the desired results on the \
-webpage may not appear.";
+webpage may not appear. To perform clustering on larger data sets, download the \
+Python code and run it locally <a target='_blank' href='https://github.com/Moshiri-Lab/TreeN93/tree/master/Python'>https://github.com/Moshiri-Lab/TreeN93/tree/master/Python</a>";
 noteDiv.appendChild(noteP);
 
 /*
