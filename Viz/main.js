@@ -57,6 +57,13 @@ for (var div of divList){
 }
 
 /*
+add initial text to the text div
+*/
+textDiv.innerHTML = "Please note that after you select an input file, there may \
+be a delay of several seconds while the tree is being constructed before you \
+see any result appear in your browser window";
+
+/*
 function to update the text div contents
 */
 function updateTextDiv(){

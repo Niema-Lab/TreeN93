@@ -17,7 +17,9 @@ var fileChooseExampleButton = document.createElement("BUTTON");
 fileChooseExampleButton.innerHTML = "Load Example Tree";
 fileChooseExampleButton.style.marginBottom = "5px";
 fileChooseExampleButton.addEventListener("click", function(){
-  readerResult = "(((((A: 0.1, B: 0.1): 0.1, C: 0.2): 0.2, D: 0.4): 0.3, ((E: 0.3, F: 0.3): 0.3, G: 0.6): 0.1): 0.3, (H: 0.6, ((I: 0.4, J: 0.4): 0.1, (((K: 0.1, L: 0.1): 0.1, M: 0.2): 0.1, N: 0.3): 0.2): 0.1): 0.4);";
+  readerResult = "(((((A: 0.1, B: 0.1): 0.1, C: 0.2): 0.2, D: 0.4): 0.3, \
+  ((E: 0.3, F: 0.3): 0.3, G: 0.6): 0.1): 0.3, (H: 0.6, ((I: 0.4, J: 0.4): 0.1, \
+  (((K: 0.1, L: 0.1): 0.1, M: 0.2): 0.1, N: 0.3): 0.2): 0.1): 0.4);";
   threshold = 0;
   thresholdInput.value = 0;
   thresholdSlider.value = 0;

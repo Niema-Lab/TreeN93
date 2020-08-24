@@ -4,7 +4,7 @@ Inputs can either be in list or matrix format, and must be in a CSV file.
 The newick string can be saved with a button click, or copied from the text area.
 
 Assumptions:
-  the pairwise distances in the input form a valid tree 
+  the pairwise distances in the input form a valid tree
 
 Things to note:
   if an input file is too large, the browser can't handle it
@@ -40,22 +40,18 @@ titleDiv.appendChild(titlePar);
 add text to the intro div
 */
 var introPar = document.createElement("p");
-var introParStrings = [
-  "This tool is used to create Newick formatted representations of clustering trees",
-  " from the TN93 pairwise distances between the leaves.<br>",
-  "The input should be in a CSV file, and can be formatted either as a list or as a matrix.<br>",
-  "The Newick file can be saved and then uploaded in the ",
-  "<a href='https://moshiri-lab.github.io/TreeN93/Viz'>TreeN93/Viz</a>",
-  " clustering tool.<br><br>",
-  "Choose an input file by clicking one of the 'Choose File' buttons.<br>",
-  "Save the Newick tree by copying the text from this page, ",
-  "or by clicking the 'Save Newick File' button.<br><br>",
-  "See the example below for formatting:"
-];
-introPar.innerHTML = "";
-for (var string of introParStrings){
-  introPar.innerHTML += string;
-}
+introPar.innerHTML =
+  "This tool is used to create Newick formatted representations of clustering \
+  trees from the TN93 pairwise distances between the leaves.<br>The input \
+  should be in a CSV file, and can be formatted either as a list or as a \
+  matrix.<br>The Newick file can be saved and then uploaded in the \
+  <a href='https://moshiri-lab.github.io/TreeN93/Viz'>TreeN93/Viz</a> \
+  clustering tool.<br><br>Choose an input file by clicking one of the \
+  'Choose File' buttons.<br>Save the Newick tree by copying the text from this \
+  page, or by clicking the 'Save Newick File' button.<br><br>Please note that \
+  after you select an input file, there may be a delay of several seconds while \
+  the Newick string is being constructed before you see any result appear in \
+  your browser window.<br><br>See the example below for formatting:"
 introDiv.appendChild(introPar);
 
 /*
@@ -245,14 +241,25 @@ function readInputFile(e, parseDistances){
 }
 
 /*
+function to call when the filereader can't read the file (too large or empty)
+*/
+function fileReaderEmpty(){
+  newickTextLabel.innerHTML = "Input file is either empty or too large to be \
+  read in the browser. To build the tree of a large data set, download the \
+  Python code and run it locally \
+  <a target='_blank' href='https://github.com/Moshiri-Lab/TreeN93/tree/master/Python'>\
+  https://github.com/Moshiri-Lab/TreeN93/tree/master/Python</a>";
+  newickTextArea.hidden = true;
+  treeNewick = "";
+}
+
+/*
 function to parse distances in list format
 skips over lines that do not have valid distances
 */
 function parseDistancesList(){
   if (fileReader.result == ""){
-    newickTextLabel.innerHTML = "Input file is either empty or too large to be read in the browser.<br>";
-    newickTextArea.hidden = true;
-    treeNewick = "";
+    fileReaderEmpty();
     return;
   }
   var distanceList = [];
@@ -276,7 +283,8 @@ function parseDistancesList(){
 
   }
   catch (e){
-    newickTextLabel.innerHTML = "Input is invalid. <br>Please check that input file is formatted correctly and try again.";
+    newickTextLabel.innerHTML = "Input is invalid. <br>Please check that input \
+    file is formatted correctly and try again.";
     newickTextArea.hidden = true;
   }
 }
@@ -286,9 +294,7 @@ function to parse distances in matrix format
 */
 function parseDistancesMatrix(){
   if (fileReader.result == ""){
-    newickTextLabel.innerHTML = "Input file is either empty or too large to be read in the browser.<br>";
-    newickTextArea.hidden = true;
-    treeNewick = "";
+    fileReaderEmpty();
     return;
   }
   var distanceMatrix = [];
@@ -322,7 +328,8 @@ function parseDistancesMatrix(){
     newickTextArea.hidden = false;
   }
   else{
-    newickTextLabel.innerHTML = "Input is invalid. <br>Please check that input file is formatted correctly and try again.";
+    newickTextLabel.innerHTML = "Input is invalid. <br>Please check that input \
+    file is formatted correctly and try again.";
     newickTextArea.hidden = true;
   }
 }
@@ -355,13 +362,3 @@ saveNewickButton.addEventListener("click", function(){
   link.click();
 });
 userDiv.appendChild(saveNewickButton);
-
-/*
-(((A:1.0000000000,B:1.0000000000)1:1.0000000000,C:2.0000000000)2:1.0000000000,D:3.0000000000)3
-(((A:1.0000000000,B:1.0000000000)1:1.0000000000,C:2.0000000000)2:1.0000000000,D :3.0000000000)3
-first one is from list, second is from matrix
-why is matrix adding a space after D?
-space goes away when file is saved ... why this happening?
-this happens on a different file also
-  last node name gets an extra space for some reason
-*/
